@@ -12,3 +12,5 @@ rustc-serialize = "*"
 histogram = "*"
 time = "*"
 rand = "*"
+
+metrics = { git="file:/home/posix4e/projects/rust-metrics"}

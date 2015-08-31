@@ -6,6 +6,7 @@ extern crate docopt;
 extern crate env_logger;
 extern crate histogram;
 extern crate mio;
+extern crate metrics;
 extern crate rand;
 extern crate rustc_serialize;
 extern crate time;

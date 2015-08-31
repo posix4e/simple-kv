@@ -6,7 +6,7 @@ use std::str::{self, FromStr};
 use mio::{PollOpt, EventLoop, EventSet, Handler, Token};
 use mio::tcp::{TcpListener, TcpStream};
 use mio::util::Slab;
-
+use metrics::registry::{Registry, StdRegistry};
 const LISTENER: Token = Token(0);
 
 /// Initial read and write buffer size.
@@ -24,6 +24,7 @@ pub struct Server {
     listener: TcpListener,
     connections: Slab<Connection>,
     db: HashMap<String, String>,
+    registry: StdRegistry<'static>
 }
 
 impl Server {
@@ -33,10 +34,12 @@ impl Server {
         let addr = SocketAddr::from_str(&format!("127.0.0.1:{}", port)).unwrap();
         let listener = try!(TcpListener::bind(&addr));
         try!(event_loop.register(&listener, LISTENER));
-
+        
         let mut server = Server { listener: listener,
                                   connections: Slab::new_starting_at(Token(1), SLAB_SIZE),
-                                  db: HashMap::new() };
+                                  db: HashMap::new(),
+                                  registry: StdRegistry::new()
+                                  };
 
         event_loop.run(&mut server)
     }
